@@ -1,0 +1,50 @@
+version: '3'
+services:
+    postgres:
+        image: postgres:latest
+        ports:
+            - 54321:5432
+        environment:
+          POSTGRES_USER: hilman
+          POSTGRES_PASSWORD: hilman123
+          PGDATA: /data/postgres
+        volumes:
+            - postgres:/data/postgres
+        networks:
+          hilman_network:
+            aliases:
+             - postgres
+        restart: unless-stopped
+    laravel:
+      image: hilman/laravel
+      ports:
+          - 8000:8000
+      volumes:
+          - ./:/app
+      depends_on:
+          - postgres
+      networks:
+        hilman_network:
+          aliases:
+           - laravel
+      command: >
+        bash -c "
+          php artisan migrate && php artisan db:seed --class=UsersTableSeeder && php -S 0.0.0.0:8000 -t public
+        "
+    adminer:
+      image: adminer
+      restart: always
+      depends_on:
+          - postgres
+      ports:
+        - 8080:8080
+      networks:
+        hilman_network:
+          aliases:
+           - adminer
+networks:
+  hilman_network:
+    external: true
+
+volumes:
+    postgres:
