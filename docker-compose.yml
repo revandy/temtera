@@ -29,7 +29,7 @@ services:
            - laravel
       command: >
         bash -c "
-          php artisan migrate && php artisan db:seed --class=UsersTableSeeder && php -S 0.0.0.0:8000 -t public
+          composer install && php artisan migrate && php artisan db:seed --class=UsersTableSeeder && php -S 0.0.0.0:8000 -t public
         "
     adminer:
       image: adminer
