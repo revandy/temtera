@@ -8,4 +8,4 @@ RUN apt-get install -y libpq-dev \
 WORKDIR /app
 COPY . /app
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install
+RUN composer install --prefer-dist
